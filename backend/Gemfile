@@ -52,3 +52,5 @@ gem "cancancan", "~> 3.6"
 gem "rack-cors", "~> 3.0"
 
 gem "pagy", "~> 9.3"
+
+gem "faker", "~> 3.5", :groups => [:development, :test]
