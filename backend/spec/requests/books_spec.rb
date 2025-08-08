@@ -11,6 +11,7 @@ RSpec.describe 'Books API', type: :request do
 
   describe 'GET /books' do
     before do
+      Borrow.delete_all
       Book.delete_all
       create_list(:book, 3)
     end

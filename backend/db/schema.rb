@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_08_031018) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_040000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,6 +28,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_031018) do
     t.index ["search_vector"], name: "index_books_on_search_vector", using: :gin
   end
 
+  create_table "borrows", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "book_id", null: false
+    t.datetime "borrowed_at", null: false
+    t.datetime "due_at", null: false
+    t.datetime "returned_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_borrows_on_book_id"
+    t.index ["due_at"], name: "index_borrows_on_due_at"
+    t.index ["user_id", "book_id"], name: "index_borrows_on_user_id_book_id_active", unique: true, where: "(returned_at IS NULL)"
+    t.index ["user_id"], name: "index_borrows_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -40,4 +54,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_031018) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "borrows", "books"
+  add_foreign_key "borrows", "users"
 end

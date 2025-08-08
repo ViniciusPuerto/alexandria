@@ -11,10 +11,16 @@ class Ability
 
     if user.librarian?
       can :manage, Book
+      can :manage, Borrow
+      can :return_book, Borrow
     else
       cannot :create, Book
       cannot :update, Book
       cannot :destroy, Book
+      can :create, Borrow
+      can :read, Borrow, user_id: user.id
+      cannot :update, Borrow
+      cannot :destroy, Borrow
     end
   end
 end

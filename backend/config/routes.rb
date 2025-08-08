@@ -12,4 +12,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :books
+  resources :borrows, only: [:index, :create] do
+    member do
+      post :return_book, action: :return_book
+    end
+  end
 end

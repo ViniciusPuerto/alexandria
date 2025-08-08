@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   enum :role, { member: 0, librarian: 1 }
 
+  has_many :borrows, dependent: :destroy
+
   # Simple JWT revocation strategy: denylist all on sign out by tracking jti
   # For API simplicity, we will not persist a denylist table initially; tokens expire quickly.
   # If you need persistent revocation, implement with a Denylist model.

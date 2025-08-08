@@ -1,0 +1,9 @@
+<p>Hi <%= @user.email %>,</p>
+
+<p>This is a friendly reminder that your borrowed book "<%= @book.title %>" is due on <%= @borrow.due_at.strftime('%B %d, %Y') %>.</p>
+
+<p>Please return it by the due date to avoid any penalties.</p>
+
+<p>Thank you,<br/>
+Alexandria Library</p>
+
