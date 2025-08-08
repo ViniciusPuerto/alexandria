@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include CanCan::ControllerAdditions
+  include Pagy::Backend
 
   rescue_from CanCan::AccessDenied do |_exception|
     render json: { error: 'Forbidden' }, status: :forbidden

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_08_024025) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_031018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,6 +20,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_024025) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "genre"
+    t.string "isbn"
+    t.integer "total_copies", default: 0, null: false
+    t.virtual "search_vector", type: :tsvector, as: "to_tsvector('english'::regconfig, (((((COALESCE(title, ''::character varying))::text || ' '::text) || (COALESCE(author, ''::character varying))::text) || ' '::text) || (COALESCE(genre, ''::character varying))::text))", stored: true
+    t.index ["isbn"], name: "index_books_on_isbn"
+    t.index ["search_vector"], name: "index_books_on_search_vector", using: :gin
   end
 
   create_table "users", force: :cascade do |t|

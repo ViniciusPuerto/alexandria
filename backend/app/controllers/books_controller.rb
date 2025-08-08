@@ -3,7 +3,9 @@ class BooksController < ApplicationController
   load_and_authorize_resource
 
   def index
-    render json: @books
+    @books = @books.search(params[:q])
+    pagy_obj, records = pagy(@books, items: params[:per_page])
+    render json: { data: records, meta: pagy_metadata(pagy_obj) }
   end
 
   def show
@@ -34,7 +36,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :author, :description)
+    params.require(:book).permit(:title, :author, :description, :genre, :isbn, :total_copies)
   end
 end
 
