@@ -22,8 +22,8 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.cache_store = :null_store
 
-  # Render exception templates for rescuable exceptions and raise for other exceptions.
-  config.action_dispatch.show_exceptions = :rescuable
+  # Raise exceptions to see failures in request specs instead of rendering HTML error pages
+  config.action_dispatch.show_exceptions = false
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -38,6 +38,11 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
+
+  # Allow all hosts in test to avoid HostAuthorization 403s in request specs
+  config.hosts.clear
+  config.hosts << "www.example.com"
+  config.hosts << "example.org"
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr

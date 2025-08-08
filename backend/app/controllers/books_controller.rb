@@ -4,7 +4,9 @@ class BooksController < ApplicationController
 
   def index
     @books = @books.search(params[:q])
-    pagy_obj, records = pagy(@books, items: params[:per_page])
+    per_page = params[:per_page].to_i
+    per_page = Pagy::DEFAULT[:items] if per_page <= 0
+    pagy_obj, records = pagy(@books, items: per_page)
     render json: { data: records, meta: pagy_metadata(pagy_obj) }
   end
 

@@ -18,7 +18,8 @@ Devise.setup do |config|
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
-  # config.parent_controller = 'DeviseController'
+  # Use the default DeviseController; our API controllers explicitly respond_to :json
+  # config.parent_controller = 'ApplicationController'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -280,6 +281,8 @@ Devise.setup do |config|
     jwt.expiration_time = 1.day.to_i
     jwt.request_formats = { user: [:json] }
   end
+
+  # Warden strategies for JWT are configured by devise-jwt railtie automatically
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine

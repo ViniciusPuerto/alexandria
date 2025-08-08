@@ -54,3 +54,9 @@ gem "rack-cors", "~> 3.0"
 gem "pagy", "~> 9.3"
 
 gem "faker", "~> 3.5", :groups => [:development, :test]
+
+gem "rspec-rails", "~> 8.0", :groups => [:development, :test]
+
+gem "factory_bot_rails", "~> 6.5", :groups => [:development, :test]
+
+gem "shoulda-matchers", "~> 6.5", :group => :test
