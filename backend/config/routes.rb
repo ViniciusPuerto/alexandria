@@ -17,4 +17,5 @@ Rails.application.routes.draw do
       post :return_book, action: :return_book
     end
   end
+  resource :dashboard, only: [:show], controller: 'dashboard'
 end

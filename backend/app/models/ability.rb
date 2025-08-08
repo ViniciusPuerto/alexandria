@@ -13,6 +13,7 @@ class Ability
       can :manage, Book
       can :manage, Borrow
       can :return_book, Borrow
+      can :read, :dashboard
     else
       cannot :create, Book
       cannot :update, Book
@@ -21,6 +22,7 @@ class Ability
       can :read, Borrow, user_id: user.id
       cannot :update, Borrow
       cannot :destroy, Borrow
+      can :read, :dashboard
     end
   end
 end
