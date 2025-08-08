@@ -1,0 +1,21 @@
+# Root gitignore
+
+# Node / frontend
+frontend/node_modules
+frontend/.next
+frontend/dist
+
+# Ruby / backend
+backend/.bundle
+backend/log
+backend/tmp
+backend/storage
+backend/vendor
+backend/config/master.key
+
+# Docker
+*.env
+.env*
+
+# macOS
+.DS_Store
