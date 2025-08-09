@@ -32,24 +32,25 @@ jobs:
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/ci_test
       SECRET_KEY_BASE: test_secret_key_base
       DEVISE_JWT_SECRET_KEY: test_jwt_secret
-      BUNDLE_GEMFILE: backend/Gemfile
     steps:
       - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler-cache: true
-          working-directory: backend
+          bundler-cache: false
       - name: Install system deps
+        working-directory: backend
         run: sudo apt-get update -y && sudo apt-get install -y libpq-dev
       - name: Bundle install (explicit)
+        working-directory: backend
         run: bundle install --jobs 4 --retry 3
       - name: Prepare database
-        run: |
-          bundle exec rails db:prepare
+        working-directory: backend
+        run: bundle exec rails db:prepare
       - name: RSpec
-        run: |
-          bundle exec rspec --format documentation
+        working-directory: backend
+        run: bundle exec rspec --format documentation
 
   frontend:
     name: Frontend (Build)
