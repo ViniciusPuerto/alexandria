@@ -28,14 +28,9 @@
     reverse_proxy backend:3000
   }
 
-  # Static files first
+# SPA fallback: serve static if present, otherwise index.html
+  try_files {path} /index.html
   file_server
-
-  # SPA fallback for any non-file request
-  handle {
-    rewrite * /index.html
-    file_server
-  }
 
   # Optional: security headers
   header {
