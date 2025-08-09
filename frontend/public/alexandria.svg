@@ -1,0 +1,17 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Alexandria logo">
+  <!-- Safe-area padding via viewBox with centered icon -->
+  <!-- Open book: left page (primary), right page (primaryDark), central negative-space spine -->
+  <path d="M40 76c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v92c0 3.314-2.686 6-6 6H60c-11.046 0-20-8.954-20-20V76z" fill="#4C7DF0"/>
+  <path d="M216 76c0-6.627-5.373-12-12-12h-64c-6.627 0-12 5.373-12 12v92c0 3.314 2.686 6 6 6h62c11.046 0 20-8.954 20-20V76z" fill="#355FCC"/>
+  <!-- Subtle inner corner cuts to imply pages (kept chunky for small-size legibility) -->
+  <path d="M116 76v90c0 4-3 6-6 6" stroke="#355FCC" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+  <path d="M140 76v90c0 4 3 6 6 6" stroke="#4C7DF0" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+  <!-- Digital nodes/pixels emerging from upper-right page -->
+  <circle cx="178" cy="60" r="5" fill="#4C7DF0"/>
+  <circle cx="196" cy="52" r="4" fill="#355FCC"/>
+  <circle cx="206" cy="44" r="3" fill="#F0B429"/>
+  <rect x="188" y="66" width="6" height="6" rx="1" fill="#355FCC"/>
+  <rect x="210" y="60" width="4" height="4" rx="1" fill="#4C7DF0"/>
+  <rect x="218" y="50" width="3" height="3" rx="0.8" fill="#F0B429"/>
+</svg>
+

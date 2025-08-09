@@ -27,9 +27,8 @@ const Brand = styled.div`
   color: ${p => p.theme.colors.text};
 `
 
-const Logo = styled.div`
-  width: 36px; height: 36px; border-radius: 10px;
-  background: conic-gradient(from 180deg at 50% 50%, #4C7DF0, #F0B429, #4C7DF0);
+const LogoImg = styled.img`
+  width: 36px; height: 36px; border-radius: 8px; display: block;
   box-shadow: ${p => p.theme.shadow.md};
 `
 
@@ -83,15 +82,13 @@ export const Header: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    // redirect rules
     if (token) {
       if (location.pathname === '/login' || location.pathname === '/signup') {
         navigate('/')
       }
     } else {
-      if (location.pathname !== '/login' && location.pathname !== '/signup') {
-        navigate('/login')
-      }
+      if (location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/') return
+      navigate('/')
     }
   }, [token, navigate])
 
@@ -99,7 +96,7 @@ export const Header: React.FC = () => {
     <Bar>
       <Inner>
         <Brand>
-          <Logo />
+          <LogoImg src="/alexandria.svg" alt="Alexandria" />
           <Title>Alexandria</Title>
           {token && uiRole === 'librarian' && !viewLockedAsMember && (
             <span style={{

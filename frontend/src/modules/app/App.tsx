@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LibrarianDashboard } from '../dashboard/LibrarianDashboard'
 import { MemberDashboard } from '../dashboard/MemberDashboard'
+import { LandingPage } from '../landing/LandingPage'
 import { useAuth } from '../auth/AuthContext'
 
 const Container = styled.div`
@@ -15,7 +16,7 @@ const Container = styled.div`
 `
 
 export const App: React.FC = () => {
-  const { uiRole, viewLockedAsMember } = useAuth()
+  const { uiRole, viewLockedAsMember, token } = useAuth()
   return (
     <BrowserRouter>
       <Header />
@@ -23,7 +24,7 @@ export const App: React.FC = () => {
         <Routes>
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={uiRole === 'librarian' && !viewLockedAsMember ? <LibrarianDashboard /> : <MemberDashboard />} />
+          <Route path="/" element={token ? (uiRole === 'librarian' && !viewLockedAsMember ? <LibrarianDashboard /> : <MemberDashboard />) : <LandingPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Container>

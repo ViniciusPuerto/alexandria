@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="frontend/public/alexandria.png" alt="Alexandria" width="400" />
+</p>
+
 ### Alexandria — Library Management System
 
 Alexandria is a small full‑stack library management system built for evaluation purposes. It demonstrates a modern Rails 8 JSON API with JWT authentication and a React + Vite frontend.
