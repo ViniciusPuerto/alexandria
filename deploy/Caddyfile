@@ -15,20 +15,14 @@
   root * /srv/dist
 
   # Proxy API to Rails backend and strip /api prefix
-  handle_path /api/* {
-    reverse_proxy backend:3000 {
-      header_up Host {host}
-      header_up X-Forwarded-Proto {scheme}
-      header_up X-Forwarded-For {remote}
-    }
-  }
+  @api path /api/*
+  uri @api strip_prefix /api
+  reverse_proxy @api backend:3000
 
   # Health endpoint passthrough
-  handle /up {
-    reverse_proxy backend:3000
-  }
+  reverse_proxy /up backend:3000
 
-# SPA fallback: serve static if present, otherwise index.html
+  # SPA fallback: serve static if present, otherwise index.html
   try_files {path} /index.html
   file_server
 
