@@ -1,0 +1,61 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Deploy mode"
+        required: true
+        default: "full"
+        type: choice
+        options:
+          - full
+          - proxy
+          - frontend
+          - backend
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (for context only)
+        uses: actions/checkout@v4
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            cd ${{ secrets.EC2_WORKDIR }}
+            echo "==> Pulling latest"
+            git fetch --all --prune
+            git pull --ff-only
+
+            case "${{ inputs.mode }}" in
+              full)
+                echo "==> Full rebuild"
+                bash deploy/prod.sh --full
+                ;;
+              proxy)
+                echo "==> Proxy only"
+                bash deploy/prod.sh --proxy
+                ;;
+              frontend)
+                echo "==> Frontend rebuild"
+                bash deploy/prod.sh --frontend
+                ;;
+              backend)
+                echo "==> Backend rebuild + migrate"
+                bash deploy/prod.sh --backend --migrate
+                ;;
+            esac
+
+            echo "==> Health check"
+            bash deploy/prod.sh --health || true
+

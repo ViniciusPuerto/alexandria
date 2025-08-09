@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    name: Backend (RSpec)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d ci_test" 
+          --health-interval=5s 
+          --health-timeout=5s 
+          --health-retries=20
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/ci_test
+      SECRET_KEY_BASE: test_secret_key_base
+      DEVISE_JWT_SECRET_KEY: test_jwt_secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - name: Install system deps
+        run: sudo apt-get update -y && sudo apt-get install -y libpq-dev
+      - name: Prepare database
+        run: |
+          bundle exec rails db:prepare
+      - name: RSpec
+        run: |
+          bundle exec rspec --format documentation
+
+  frontend:
+    name: Frontend (Build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install deps
+        run: npm ci
+      - name: Build
+        env:
+          VITE_API_BASE: /api
+        run: npm run build
+
