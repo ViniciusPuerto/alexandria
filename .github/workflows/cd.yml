@@ -28,33 +28,28 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.EC2_PORT || 22 }}
           script_stop: true
           script: |
-            set -euo pipefail
-            cd ${{ secrets.EC2_WORKDIR }}
+            set -eu
+            cd "${{ secrets.EC2_WORKDIR }}"
             echo "==> Pulling latest"
             git fetch --all --prune
             git pull --ff-only
 
-            case "${{ inputs.mode }}" in
-              full)
-                echo "==> Full rebuild"
-                bash deploy/prod.sh --full
-                ;;
-              proxy)
-                echo "==> Proxy only"
-                bash deploy/prod.sh --proxy
-                ;;
-              frontend)
-                echo "==> Frontend rebuild"
-                bash deploy/prod.sh --frontend
-                ;;
-              backend)
-                echo "==> Backend rebuild + migrate"
-                bash deploy/prod.sh --backend --migrate
-                ;;
-            esac
+            MODE="${{ inputs.mode }}"
+            if [ "$MODE" = "full" ]; then
+              echo "==> Full rebuild"
+              bash deploy/prod.sh --full
+            elif [ "$MODE" = "proxy" ]; then
+              echo "==> Proxy only"
+              bash deploy/prod.sh --proxy
+            elif [ "$MODE" = "frontend" ]; then
+              echo "==> Frontend rebuild"
+              bash deploy/prod.sh --frontend
+            elif [ "$MODE" = "backend" ]; then
+              echo "==> Backend rebuild + migrate"
+              bash deploy/prod.sh --backend --migrate
+            fi
 
             echo "==> Health check"
             bash deploy/prod.sh --health || true
