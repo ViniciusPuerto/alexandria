@@ -11,20 +11,24 @@
 {
   encode zstd gzip
 
-  # Serve the built frontend
-  root * /srv/dist
+  route {
+    # API: strip /api prefix and proxy to Rails
+    handle_path /api/* {
+      reverse_proxy backend:3000
+    }
 
-  # Proxy API to Rails backend and strip /api prefix
-  @api path /api/*
-  uri @api strip_prefix /api
-  reverse_proxy @api backend:3000
+    # Health passthrough (no prefix)
+    handle /up {
+      reverse_proxy backend:3000
+    }
 
-  # Health endpoint passthrough
-  reverse_proxy /up backend:3000
-
-  # SPA fallback: serve static if present, otherwise index.html
-  try_files {path} /index.html
-  file_server
+    # Static + SPA fallback
+    handle {
+      root * /srv/dist
+      try_files {path} /index.html
+      file_server
+    }
+  }
 
   # Optional: security headers
   header {
