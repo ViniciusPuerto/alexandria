@@ -2,8 +2,12 @@ class BorrowsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # Members: list their own borrows; Librarians: list all
-    borrows = current_user.librarian? ? Borrow.all : current_user.borrows
+    if current_user.librarian?
+      borrows = Borrow.all
+      borrows = borrows.where(user_id: params[:user_id]) if params[:user_id].present?
+    else
+      borrows = current_user.borrows
+    end
     render json: borrows
   end
 
