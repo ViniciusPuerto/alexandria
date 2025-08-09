@@ -12,7 +12,7 @@ const Title = styled.h2`
 `
 
 export const LoginPage: React.FC = () => {
-  const { setToken, setUser, uiRole, setUiRole } = useAuth()
+  const { setToken, setUser, uiRole, setUiRole, setViewLockedAsMember } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -32,10 +32,16 @@ export const LoginPage: React.FC = () => {
         user: { email, password }
       })
       const token = res.data?.token
-      const user = res.data?.user
+      const user = res.data?.user as { id: number; email: string; role?: 'member' | 'librarian' }
       if (!token) throw new Error('No token returned')
       setToken(token)
       setUser(user)
+      // Lock view if server user role is member OR if UI selected Member
+      if (user?.role === 'member' || uiRole === 'member') {
+        setViewLockedAsMember(true)
+      } else {
+        setViewLockedAsMember(false)
+      }
       navigate('/')
     } catch (err: any) {
       const msg = err?.response?.data?.errors?.join?.(', ') || 'Invalid credentials'

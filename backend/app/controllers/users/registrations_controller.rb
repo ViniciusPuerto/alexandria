@@ -8,7 +8,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       # Avoid writing to the session in API-only mode
       sign_in(resource_name, resource, store: false)
-      render json: { user: resource, token: request.env['warden-jwt_auth.token'] }, status: :created
+      render json: {
+        user: { id: resource.id, email: resource.email, role: resource.role },
+        token: request.env['warden-jwt_auth.token']
+      }, status: :created
     else
       render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
     end
@@ -18,7 +21,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def respond_with(resource, _opts = {})
     if resource.persisted?
-      render json: { user: resource, token: request.env['warden-jwt_auth.token'] }, status: :created
+      render json: {
+        user: { id: resource.id, email: resource.email, role: resource.role },
+        token: request.env['warden-jwt_auth.token']
+      }, status: :created
     else
       render json: { errors: resource.errors.full_messages }, status: :unprocessable_entity
     end

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { api } from '../../shared/api/client'
 
-type AuthUser = { id: number; email: string } | null
+type AuthUser = { id: number; email: string; role?: 'member' | 'librarian' } | null
 type UiRole = 'member' | 'librarian'
 type AuthContextValue = {
   token: string | null
@@ -11,6 +11,8 @@ type AuthContextValue = {
   logout: () => void
   uiRole: UiRole
   setUiRole: (r: UiRole) => void
+  viewLockedAsMember: boolean
+  setViewLockedAsMember: (locked: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
@@ -23,6 +25,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try { return JSON.parse(raw) } catch { return null }
   })
   const [uiRole, setUiRole] = useState<UiRole>(() => (localStorage.getItem('ui_role') as UiRole) || 'member')
+  const [viewLockedAsMember, setViewLockedAsMember] = useState<boolean>(() => {
+    const raw = localStorage.getItem('view_locked_member')
+    return raw === 'true'
+  })
 
   useEffect(() => {
     if (token) localStorage.setItem('auth_token', token)
@@ -43,13 +49,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setToken(null)
     setUser(null)
+    setViewLockedAsMember(false)
   }
 
   useEffect(() => {
     localStorage.setItem('ui_role', uiRole)
   }, [uiRole])
 
-  const value = useMemo(() => ({ token, user, setToken, setUser, logout, uiRole, setUiRole }), [token, user, uiRole])
+  useEffect(() => {
+    localStorage.setItem('view_locked_member', String(viewLockedAsMember))
+  }, [viewLockedAsMember])
+
+  // Enforce lock: member-only view cannot switch to librarian
+  useEffect(() => {
+    if (viewLockedAsMember && uiRole !== 'member') {
+      setUiRole('member')
+    }
+  }, [viewLockedAsMember, uiRole])
+
+  const value = useMemo(() => ({ token, user, setToken, setUser, logout, uiRole, setUiRole, viewLockedAsMember, setViewLockedAsMember }), [token, user, uiRole, viewLockedAsMember])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

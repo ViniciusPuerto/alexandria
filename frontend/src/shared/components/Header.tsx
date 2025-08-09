@@ -68,7 +68,7 @@ const MenuItem = styled.button`
 `
 
 export const Header: React.FC = () => {
-  const { user, token, logout, uiRole, setUiRole } = useAuth()
+  const { user, token, logout, uiRole, setUiRole, viewLockedAsMember } = useAuth()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -101,7 +101,7 @@ export const Header: React.FC = () => {
         <Brand>
           <Logo />
           <Title>Alexandria</Title>
-          {token && uiRole === 'librarian' && (
+          {token && uiRole === 'librarian' && !viewLockedAsMember && (
             <span style={{
               marginLeft: 10,
               fontSize: 12,
@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
               <div style={{ display: 'flex', gap: 8, padding: '4px 6px', alignItems: 'center' }}>
                 <span style={{ color: '#B9C0CC', fontSize: 13 }}>View as:</span>
                 <button onClick={() => setUiRole('member')} style={{ background: uiRole==='member'?'rgba(255,255,255,0.08)':'transparent', color: 'inherit', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '4px 8px', cursor: 'pointer' }}>Member</button>
-                <button onClick={() => setUiRole('librarian')} style={{ background: uiRole==='librarian'?'rgba(255,255,255,0.08)':'transparent', color: 'inherit', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '4px 8px', cursor: 'pointer' }}>Librarian</button>
+                <button disabled={viewLockedAsMember} onClick={() => setUiRole('librarian')} style={{ background: uiRole==='librarian'&&!viewLockedAsMember?'rgba(255,255,255,0.08)':'transparent', opacity: viewLockedAsMember?0.5:1, color: 'inherit', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, padding: '4px 8px', cursor: viewLockedAsMember?'not-allowed':'pointer' }}>Librarian</button>
               </div>
               {token ? (
                 <MenuItem onClick={() => { logout(); navigate('/login') }}>Logout</MenuItem>

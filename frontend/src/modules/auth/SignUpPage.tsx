@@ -11,10 +11,8 @@ const Title = styled.h2`
   margin: 0 0 18px;
 `
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
-
 export const SignUpPage: React.FC = () => {
-  const { setToken } = useAuth()
+  const { setToken, setUser, setViewLockedAsMember } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -39,8 +37,11 @@ export const SignUpPage: React.FC = () => {
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
       })
       const token = res.data?.token
+      const user = res.data?.user as { id: number; email: string; role?: 'member' | 'librarian' }
       if (!token) throw new Error('No token returned')
       setToken(token)
+      if (user) setUser(user)
+      if (user?.role === 'member') setViewLockedAsMember(true)
       navigate('/')
     } catch (err: any) {
       const msg = err?.response?.data?.errors?.join?.(', ') || err.message || 'Sign up failed'

@@ -15,7 +15,7 @@ const Container = styled.div`
 `
 
 export const App: React.FC = () => {
-  const { uiRole } = useAuth()
+  const { uiRole, viewLockedAsMember } = useAuth()
   return (
     <BrowserRouter>
       <Header />
@@ -23,7 +23,7 @@ export const App: React.FC = () => {
         <Routes>
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={uiRole === 'librarian' ? <LibrarianDashboard /> : <MemberDashboard />} />
+          <Route path="/" element={uiRole === 'librarian' && !viewLockedAsMember ? <LibrarianDashboard /> : <MemberDashboard />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Container>
