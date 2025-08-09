@@ -1,0 +1,48 @@
+{
+  email {$ACME_EMAIL}
+}
+
+# Replace the site address below with your domain or public hostname/IP
+# Examples:
+# ec2-15-229-77-95.sa-east-1.compute.amazonaws.com
+# :80 (for HTTP only)
+
+{$SITE_ADDRESS}
+{
+  encode zstd gzip
+
+  # Serve the built frontend
+  root * /srv/dist
+
+  # Proxy API to Rails backend and strip /api prefix
+  handle_path /api* {
+    reverse_proxy backend:3000 {
+      header_up Host {host}
+      header_up X-Forwarded-Proto {scheme}
+      header_up X-Forwarded-For {remote}
+    }
+  }
+
+  # Health endpoint passthrough
+  handle /up {
+    reverse_proxy backend:3000
+  }
+
+  # Static files first
+  file_server
+
+  # SPA fallback for any non-file request
+  handle {
+    rewrite * /index.html
+    file_server
+  }
+
+  # Optional: security headers
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options nosniff
+    X-Frame-Options DENY
+    Referrer-Policy no-referrer-when-downgrade
+  }
+}
+

@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_production
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+      DATABASE_URL: postgres://postgres:postgres@db:5432/app_production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      DEVISE_JWT_SECRET_KEY: ${DEVISE_JWT_SECRET_KEY:-${SECRET_KEY_BASE}}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      BUNDLE_PATH: /usr/local/bundle
+      RAILS_LOG_TO_STDOUT: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "3000"
+    command: bash -lc "bundle exec rails db:migrate && bundle exec rails server -e production -b 0.0.0.0 -p 3000"
+    restart: unless-stopped
+
+  # Builds the frontend production bundle into ./frontend/dist
+  frontend-build:
+    image: node:20-alpine
+    working_dir: /usr/src/app
+    environment:
+      VITE_API_BASE: ${VITE_API_BASE:-/api}
+    volumes:
+      - ./frontend:/usr/src/app
+    command: sh -lc "npm ci && npm run build"
+    depends_on:
+      - backend
+    restart: "no"
+
+  caddy:
+    image: caddy:2-alpine
+    depends_on:
+      - backend
+      - frontend-build
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+      - ./frontend/dist:/srv/dist:ro
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:
+
