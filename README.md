@@ -13,6 +13,10 @@ Alexandria is a small full‑stack library management system built for evaluatio
 - **Borrows**: members can borrow when copies are available; librarians can manage and mark returns
 - **Dashboards**: member view (active/overdue borrows) and librarian metrics view
 
+### Live demo (production)
+
+Deployed environment: https://ec2-15-229-77-95.sa-east-1.compute.amazonaws.com/
+
 ### Requirements
 
 Choose one of the following setups.
@@ -125,6 +129,8 @@ cd backend && bundle exec rspec
 ### API reference and cURL examples
 
 See the complete endpoint reference with ready‑to‑run cURL snippets in [`docs/API.md`](docs/API.md).
+
+For product context and user stories, see [`docs/PRODUCT.md`](docs/PRODUCT.md).
 
 ### Architecture notes
 
