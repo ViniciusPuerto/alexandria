@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "4370146-7a8c3031-e9d2-4998-bb67-50c31a459b86",
+		"name": "Alexandria",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"id": "4370146-0fcf37bf-3222-4718-a16b-12536a5f736f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"email\": \"vinicius@example.com\",\n        \"password\": \"password\",\n        \"password_confirmation\": \"password\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"id": "4370146-7aaa3d17-466b-4316-abb5-960067049c2a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user\": {\n        \"email\": \"vinicius@example.com\",\n        \"password\": \"password\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/sign_in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"sign_in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"id": "4370146-517564eb-fb1a-47e8-a10d-716353b8f285",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/users/sign_out",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"sign_out"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Books",
+			"id": "4370146-4a2b0686-a4e0-46ca-b854-bd35048ed54b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/books?q=fantasy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "fantasy"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a book",
+			"id": "4370146-89117771-ea96-4deb-99a2-5266b77b2dbb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book\": {\n        \"title\": \"The Lord of the Rings\",\n        \"author\": \"John Ronald Reuel Tolkien\",\n        \"genre\": \"Fantasy\",\n        \"isbn\": \"9788845292613\",\n        \"total_copies\": 30\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/books",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search with pagination",
+			"id": "4370146-833ba4f9-b6fd-4849-a464-5644a6105867",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/books?&page=1&per_page=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "per_page",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Borrows",
+			"id": "4370146-897fdb16-89d2-412c-8342-ab1f90a10f18",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/borrows",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"borrows"
+					],
+					"query": [
+						{
+							"key": "Auth",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a borrow",
+			"id": "4370146-9bd551c8-4c2e-4f45-b5d1-f5fa489dcf30",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MiIsInNjcCI6InVzZXIiLCJhdWQiOm51bGwsImlhdCI6MTc1NDY4MzY0MywiZXhwIjoxNzU0NzcwMDQzLCJqdGkiOiIyNTJkNjEwNS0yYzdmLTQxZjYtYTgxMi1hYTI1NDc4ZjJiNjgifQ.LHHZDc9BuB2z0Vzyg9_uwFgGP_Zg49sX0beqOPtg2tg"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"book_id\": 70\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/borrows",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"borrows"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return a borrow",
+			"id": "4370146-46982993-4f3e-4c11-b206-182a1e0f4310",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/borrows/:id/return_book",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"borrows",
+						":id",
+						"return_book"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list borrows",
+			"id": "4370146-0a1a297e-90c1-4e2d-9111-8e57a5430dcd",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/borrows",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"borrows"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "librarian dashboard",
+			"id": "4370146-0b254447-0e2d-4acf-8492-54a303d92f84",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/dashboard?librarian=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard"
+					],
+					"query": [
+						{
+							"key": "librarian",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "member dashboard",
+			"id": "4370146-ac50c864-87a5-414d-a1f8-cb7b83a0e973",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/dashboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"dashboard"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNzU0NjIxODA3LCJleHAiOjE3NTQ3MDgyMDcsImp0aSI6ImMxZTc2YWNlLWJkMzUtNDJlMC1hNmI4LWM3MmQ2MzY0MGM5ZiJ9.phgsFB1Ao_tm9m_E4-WTu3Ff14UpdJriAm5u0GuS4Ik",
+			"type": "default"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "default"
+		}
+	]
+}
